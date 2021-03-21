@@ -1,7 +1,7 @@
 #include "20172141.h"
 
 int hash(char *str){
-  // hash function : 각 ASCII code를 전부 더하여 20으로 나눈 나머지 반환
+	// hash function : 각 ASCII code를 전부 더하여 20으로 나눈 나머지 반환
 	int i, sum = 0;
 	for(i=0; i<strlen(str); i++){
 		sum += str[i];
@@ -11,14 +11,14 @@ int hash(char *str){
 }
 
 void putHash(int idx, int num, char *inst){
-  // hashtable node assign
+	// hashtable node assign
 	struct HashNode *entry = malloc(sizeof(struct HashNode));
 	struct HashNode *ptr = NULL;
 	entry->num = num;
 	strcpy(entry->inst, inst);
 	entry->next = NULL;
 
-  // add nodes to hashtable
+	// add nodes to hashtable
 	if(table[idx] == NULL){
 		table[idx] = entry;
 	}
@@ -29,7 +29,7 @@ void putHash(int idx, int num, char *inst){
 }
 
 void setHashtable(){
-  //file open
+	//file open
 	FILE *fp = fopen("opcode.txt", "r");
 	char name[10], tmp[10];
 	int num, hashed;
@@ -38,7 +38,7 @@ void setHashtable(){
 		return;
 	}
   
-  // read contents in file & add to hash table
+	// read contents in file & add to hash table
 	while(1){
 		int res = fscanf(fp, "%x %s %s", &num, name, tmp);
 		if(res == -1) break;
@@ -50,25 +50,25 @@ void setHashtable(){
 }
 
 void freeHashtable(){
-  // delete all hashtable nodes
-  struct HashNode *ptr = NULL;
-  struct HashNode *temp = NULL;
-  for(int i = 0; i < 20; i++){
-    ptr = table[i];
-    while(ptr != NULL){
-      temp = ptr;
-      ptr = ptr->next;
-      table[i] = ptr;
-      free(temp);
-    }
-  }
-  free(ptr);
+	// delete all hashtable nodes
+	struct HashNode *ptr = NULL;
+	struct HashNode *temp = NULL;
+	for(int i = 0; i < 20; i++){
+		ptr = table[i];
+		while(ptr != NULL){
+		temp = ptr;
+		ptr = ptr->next;
+		table[i] = ptr;
+		free(temp);
+		}
+	}
+	free(ptr);
 }
 
 void OPList(){
 	int i;
 	struct HashNode *ptr = NULL;
-  // print hashtable
+	// print hashtable
 	for(i=0; i<20; i++){
 		printf("%d : ", i);
 		ptr = table[i];
@@ -87,19 +87,19 @@ void OPList(){
 int OPmnemonic(char *target){
 	int i, flag = 0;
 	struct HashNode* ptr = NULL;
-  // search target in hashtable
+	// search target in hashtable
 	for(i=0; i< 19; i++){
 		ptr = table[i];
 		if(ptr == NULL) continue;
 		for(ptr = table[i]; ptr != NULL; ptr = ptr->next){
 			if(strcmp(ptr->inst, target) == 0){
-        flag = 1;
+        			flag = 1;
 				printf("opcode is %X\n", ptr->num);
 			}
 		}
 	}
 
-  // if not found -> error
-  if(flag == 0) return -1;
-  return 0;
+	// if not found -> error
+	if(flag == 0) return -1;
+	return 0;
 }

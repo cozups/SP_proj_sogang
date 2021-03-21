@@ -1,9 +1,11 @@
+/* 포함되는 파일 */
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <dirent.h>
 #include <sys/stat.h>
+/* 정의되는 상수 */
 #define MAX_ROW_SIZE 65536
 #define MAX_COL_SIZE 16
 #define MEMSIZE MAX_ROW_SIZE*MAX_COL_SIZE

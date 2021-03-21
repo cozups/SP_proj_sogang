@@ -15,7 +15,7 @@ void help(){
 void freeAll(){
   // history, hashtable FREE
 	freeHistory();
-  freeHashtable();
+	freeHashtable();
 }
 void freeHistory(){
   // delete all nodes
@@ -31,15 +31,15 @@ void freeHistory(){
 	free(ptr);
 }
 void addHistory(char *his, int mode){
-  int i;
-  /* mode 0 : opcode 외, mode 1 : opcode */
-  if(mode == 0){
-  	/* modify arguments to the correct form (ex: dump 004 -> dump 4) */
-  	for (i = 1; i < argc; i++) {
-  		int num = strtol(argv[i], NULL, 16);
-  		sprintf(argv[i], "%X", num);
-  	}
-  }
+	int i;
+	/* mode 0 : opcode 외, mode 1 : opcode */
+	if(mode == 0){
+  		/* modify arguments to the correct form (ex: dump 004 -> dump 4) */
+	  	for (i = 1; i < argc; i++) {
+  			int num = strtol(argv[i], NULL, 16);
+  			sprintf(argv[i], "%X", num);
+		}
+	}
 	/* modify input to the correct for for history (ex: dump AA   , BB -> dump AA, BB) */
 	strcat(his, argv[0]);
 	int idx = strlen(argv[0]);
@@ -54,7 +54,7 @@ void addHistory(char *his, int mode){
 	idx += strlen(argv[i]);
 	his[idx] = '\0';
   
-  /* assign */
+	/* assign */
 	struct HNode *newnode = malloc(sizeof(struct HNode));
 	struct HNode *ptr = NULL;
 	HNode_cnt++;
@@ -62,7 +62,7 @@ void addHistory(char *his, int mode){
 	newnode->next = NULL;
 	strcpy(newnode->inst, his);
 
-  /* Add nodes */
+	/* Add nodes */
 	if(HEAD == NULL){
 		HEAD = newnode;
 	}
@@ -71,18 +71,21 @@ void addHistory(char *his, int mode){
 		ptr->next = newnode;
 	}
 }
+
 void printHistory(){
-  // print history nodes
+	// print history nodes
 	struct HNode *ptr= NULL;
 	if(HEAD == NULL) return;
 	for(ptr = HEAD; ptr != NULL; ptr = ptr->next){
 		printf("%d\t %s\n", ptr->num, ptr->inst);
 	}
 }
+
 void history(){
 	if(HNode_cnt == 0) return;
 	printHistory();
 }
+
 void dir(){
 	DIR *stream = opendir(".");
 	struct dirent *file = NULL;
@@ -110,7 +113,7 @@ void dir(){
 				//if executable file
 				printf("%s*\n", file->d_name);
 			}
-      //if not directory and executable file
+			//if not directory and executable file
 			else printf("%s\n", file->d_name);
 			file = readdir(stream);
 		}
