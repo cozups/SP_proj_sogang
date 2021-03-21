@@ -1,7 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "shell.h"
+#include "20172141.h"
+
 void help(){
 	printf("h[elp]\n");
 	printf("d[ir]\n");
@@ -15,9 +13,12 @@ void help(){
 	printf("opcodelist\n");
 }
 void freeAll(){
+  // history, hashtable FREE
 	freeHistory();
+  freeHashtable();
 }
 void freeHistory(){
+  // delete all nodes
 	struct HNode *ptr = HEAD;
 	struct HNode *temp;
 	while(ptr != NULL){
@@ -29,18 +30,39 @@ void freeHistory(){
 	}
 	free(ptr);
 }
-void quit(){
-	freeAll();
-	exit(0);
-}
-void addHistory(char *cmd){
+void addHistory(char *his, int mode){
+  int i;
+  /* mode 0 : opcode 외, mode 1 : opcode */
+  if(mode == 0){
+  	/* modify arguments to the correct form (ex: dump 004 -> dump 4) */
+  	for (i = 1; i < argc; i++) {
+  		int num = strtol(argv[i], NULL, 16);
+  		sprintf(argv[i], "%X", num);
+  	}
+  }
+	/* modify input to the correct for for history (ex: dump AA   , BB -> dump AA, BB) */
+	strcat(his, argv[0]);
+	int idx = strlen(argv[0]);
+	his[idx] = ' '; idx += 1;
+	for (i = 1; i < argc - 1; i++) {
+		strcat(his, argv[i]);
+		idx += strlen(argv[i]);
+		his[idx] = ','; idx += 1;
+		his[idx] = ' '; idx += 1;
+	}
+	strcat(his, argv[i]);
+	idx += strlen(argv[i]);
+	his[idx] = '\0';
+  
+  /* assign */
 	struct HNode *newnode = malloc(sizeof(struct HNode));
 	struct HNode *ptr = NULL;
 	HNode_cnt++;
 	newnode->num = HNode_cnt;
-	strcpy(newnode->inst, cmd);
 	newnode->next = NULL;
-	
+	strcpy(newnode->inst, his);
+
+  /* Add nodes */
 	if(HEAD == NULL){
 		HEAD = newnode;
 	}
@@ -50,7 +72,9 @@ void addHistory(char *cmd){
 	}
 }
 void printHistory(){
+  // print history nodes
 	struct HNode *ptr= NULL;
+	if(HEAD == NULL) return;
 	for(ptr = HEAD; ptr != NULL; ptr = ptr->next){
 		printf("%d\t %s\n", ptr->num, ptr->inst);
 	}
@@ -80,16 +104,16 @@ void dir(){
 					file = readdir(stream);
 					continue;
 				}
-				printf("%s/ ", file->d_name);
+				printf("%s/\n", file->d_name);
 			}
 			else if(dir_info.st_mode & S_IXUSR || dir_info.st_mode & S_IXGRP || dir_info.st_mode & S_IXOTH){
 				//if executable file
-				printf("%s* ", file->d_name);
+				printf("%s*\n", file->d_name);
 			}
-			else printf("%s ", file->d_name);
+      //if not directory and executable file
+			else printf("%s\n", file->d_name);
 			file = readdir(stream);
 		}
 	}
-	printf("\n");
 	closedir(stream);
 }
