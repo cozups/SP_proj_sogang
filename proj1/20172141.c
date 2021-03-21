@@ -67,12 +67,15 @@ int tokenize(char *src){
 			flag = 0;
 			prev = check[i];
 		}
-		if (check[i] == 0 && prev < 2 && src[i] == ',') return -1;		// 첫 번째 argument(command) 전에는 컴마가 없어야함-> 있다면 error
-		if (prev >= 2) {    // argument 사이 컴마 확인 -> 컴마가 있어야 함. 없다면 error (flag 1: 컴마 있음, 0: 컴마 없음)
+		// 첫 번째 argument(command) 전에는 컴마가 없어야함-> 있다면 error
+		if (check[i] == 0 && prev < 2 && src[i] == ',') return -1;
+		// argumnet 사이 컴마 확인-> 컴마가 있어야함. 없다면 error (flag 1: 컴마 있음, 0: 컴마없음)
+		if (prev >= 2) {    
 			if (check[i] == 0 && src[i] == ',') flag = 1;
 			if (i + 1 != strlen(src) && check[i + 1] > prev && flag == 0) return -1;
 		}
-		if (prev == argc && check[i] == 0 && src[i] == ',') return -1;	// 마지막부분-> 마지막 argument 뒤에 컴마가 있다면 error
+		// 마지막 부분-> 마지막 argument 뒤에 컴마가 있다면 error
+		if (prev == argc && check[i] == 0 && src[i] == ',') return -1;
 	} 
 
 	/* opcode 명령어가 아닌 경우에만 16진수 확인 */
