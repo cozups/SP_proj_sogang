@@ -7,15 +7,15 @@ int CheckWrongInput(char *src){
 	/* check if input is wrong */
 	strcpy(temp, src);
 	ptr = strtok(temp, ", \t");
-  if(strcmp(ptr, "assemble") != 0 && strcmp(ptr, "type") != 0){
-	  for(i = strlen(ptr); i< strlen(src); i++){
+	if(strcmp(ptr, "assemble") != 0 && strcmp(ptr, "type") != 0){
+		for(i = strlen(ptr); i< strlen(src); i++){
 		  /* check if input has wrong character */
-  		if(src[i] < 'a' && src[i] > 'z' && src[i] < 'A' && src[i] > 'Z'){
-  			if(src[i] != ' ' && src[i] != '\t' && src[i] != ',')
-  				return -1;
+  			if(src[i] < 'a' && src[i] > 'z' && src[i] < 'A' && src[i] > 'Z'){
+  				if(src[i] != ' ' && src[i] != '\t' && src[i] != ',')
+  					return -1;
+  			}
   		}
   	}
-  }
 
 	/* ,,, -> 컴마가 연속되는 경우 error */
 	for (i = 0; i < strlen(src) - 1; i++) {
